@@ -1,20 +1,12 @@
-from typing import Callable, List, Optional
-
-from pip._internal.req.req_install import InstallRequirement
-from pip._internal.req.req_set import RequirementSet
-
-InstallRequirementProvider = Callable[
-    [str, Optional[InstallRequirement]], InstallRequirement
-]
+from __future__ import absolute_import, division, unicode_literals
 
 
-class BaseResolver:
-    def resolve(
-        self, root_reqs: List[InstallRequirement], check_supported_wheels: bool
-    ) -> RequirementSet:
-        raise NotImplementedError()
+class Filter(object):
+    def __init__(self, source):
+        self.source = source
 
-    def get_installation_order(
-        self, req_set: RequirementSet
-    ) -> List[InstallRequirement]:
-        raise NotImplementedError()
+    def __iter__(self):
+        return iter(self.source)
+
+    def __getattr__(self, name):
+        return getattr(self.source, name)
